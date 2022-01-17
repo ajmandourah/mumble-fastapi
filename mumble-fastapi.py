@@ -15,12 +15,16 @@
 
 from fastapi import FastAPI
 from mumble.mctl import MumbleCtlBase
+import os
 
+ip = os.getenv("MUMBLE_SERVER")
+port = os.getenv("ICE_PORT")
+sliceFile = os.getenv("SLICEFILE")
 # This is the default Mumur setting, insert your settings or leave as default 
-connstring = 'Meta:tcp -h 127.0.0.1 -p 6502'
-sliceFile  = '/usr/share/slice/Murmur.ice'
+connstring = 'Meta:tcp -h ' + str(ip) + ' -p ' + str(port)
+# sliceFile  = '/usr/share/slice/Murmur.ice'
 icesecret = None
-
+print(connstring)
 
 
 ctl = MumbleCtlBase.newInstance( connstring, sliceFile, icesecret )
@@ -60,11 +64,7 @@ async def getUsrs():
         for userinfo in usersinfo:
             name = userinfo['name']
             userlist.append(name)
-    try:
-        userlist.remove("AbdulMaqsood")
-        return {"Online Users:" : userlist}
-    except:
-        return {"Online Users:" : userlist}
+    return {"Online Users:" : userlist}
 
 
 @app.get('/{srv_id}')
@@ -84,5 +84,4 @@ async def getTree(srv_id:int):
 async def getServers():
     servers=ctl.getBootedServers()
     return servers
-
 
