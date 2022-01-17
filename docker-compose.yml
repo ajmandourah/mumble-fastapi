@@ -1,0 +1,17 @@
+version: "3"
+services:
+  mumblecvp:
+    image: ajmandourah/mumblecvp:latest
+    container_name: mumblecvp
+    volumes:
+      - PATH_TO_YOUR_SLICEFILE:/data
+    environment:
+      - MUMBLE_SERVER=YOUR_MUMBLE_IP_ADDRESS
+      - ICE_PORT=6502
+      - SLICEFILE=/data/Murmur.ice 
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    command: hypercorn mumble-fastapi:app --bind 0.0.0.0:21803 #port can be changed as you desire
+    network_mode: host
+    restart: unless-stopped
