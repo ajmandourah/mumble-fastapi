@@ -111,7 +111,7 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
         raise EnvironmentError( "Murmur does not appear to be listening on this address (Ice ping failed)." )
 
     try:
-        import Murmur
+        import MumbleServer
     except ImportError:
         # Try loading the Slice from Murmur directly via its getSlice method.
         # See scripts/testdynamic.py in Mumble's Git repository.
@@ -163,16 +163,16 @@ def MumbleCtlIce( connstring, slicefile=None, icesecret=None ):
                 finally:
                     slicetemp.close()
 
-        import Murmur
+        import MumbleServer
 
-    meta = Murmur.MetaPrx.checkedCast(prx)
+    meta = MumbleServer.MetaPrx.checkedCast(prx)
 
     murmurversion = meta.getVersion()[:3]
 
     if   murmurversion == (1, 1, 8):
         return MumbleCtlIce_118( connstring, meta )
 
-    elif murmurversion[:2] == (1, 3):
+    elif murmurversion[:2] >= (1, 3):
         return MumbleCtlIce_123( connstring, meta )
 
 #        elif murmurversion[2] == 2:

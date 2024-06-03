@@ -43,3 +43,4 @@ def getLatestUpstreamVersion():
 def isUptodate():
     """ Check if this version of Mumble-Django is the latest available. """
     return version_str >= getLatestUpstreamVersion()
+
