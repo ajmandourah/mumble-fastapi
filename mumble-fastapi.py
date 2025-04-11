@@ -66,6 +66,28 @@ async def getUsrs():
             userlist.append(name)
     return {"Online Users:" : userlist}
 
+@app.get('/widget2')
+async def getUsrs():
+    name = ctl.getConf(1, "registername")
+    tree = ctl.getTree(1)
+
+    serv = {
+        'id':   1,
+        'name': name,
+        'root': getChannel(tree)
+        }
+
+    rawdata = serv
+    data = rawdata['root']['channels']
+    userlist = []
+
+    for channel in data:
+        usersinfo = channel['users']
+        for userinfo in usersinfo:
+            name = userinfo['name']
+            user_data = { "username" : name }
+            userlist.append(user_data)
+    return {"Online Users" : userlist}
 
 @app.get('/{srv_id}')
 async def getTree(srv_id:int):
